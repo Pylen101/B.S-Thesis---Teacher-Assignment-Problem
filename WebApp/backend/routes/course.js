@@ -1,21 +1,27 @@
-import express from 'express'
-import courseCont from '../controllers/course.js'
+const express = require('express')
+const {
+    getCourses,
+    getCourse,
+    createCourse,
+    deleteCourse,
+    updateCourse
+} = require('../controllers/courseController')
 
 const router = express.Router()
 
 // GET all workouts
-router.get('/', courseCont.getCourses)
+router.get('/', getCourses)
 
 // GET a single workout
-router.get('/:id', courseCont.getCourse)
+router.get('/:id', getCourse)
 
 // POST a new workout
-router.post('/', courseCont.createCourse)
+router.post('/', createCourse)
 
 // DELETE a workout
-router.delete('/:id', courseCont.deleteCourse)
+router.delete('/:id', deleteCourse)
 
 // UPDATE a workout
-router.patch('/:id', courseCont.updateCourse)
+router.patch('/:id', updateCourse)
 
 module.exports = router

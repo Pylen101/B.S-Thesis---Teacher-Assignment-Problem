@@ -1,14 +1,15 @@
-import Course from '../models/courseModel.js'
+const Course = require('../models/courseModel')
+const mongoose = require('mongoose')
 
 // get all workouts
-export const getCourses = async (req, res) => {
+const getCourses = async (req, res) => {
     const courses = await Course.find({}).sort({ createdAt: -1 })
 
     res.status(200).json(courses)
 }
 
 // get a single workout
-export const getCourse = async (req, res) => {
+const getCourse = async (req, res) => {
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -25,7 +26,7 @@ export const getCourse = async (req, res) => {
 }
 
 // create a new workout
-export const createCourse = async (req, res) => {
+const createCourse = async (req, res) => {
     const { title, load, reps } = req.body
 
     // add to the database
@@ -38,7 +39,7 @@ export const createCourse = async (req, res) => {
 }
 
 // delete a workout
-export const deleteCourse = async (req, res) => {
+const deleteCourse = async (req, res) => {
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -55,7 +56,7 @@ export const deleteCourse = async (req, res) => {
 }
 
 // update a workout
-export const updateCourse = async (req, res) => {
+const updateCourse = async (req, res) => {
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {

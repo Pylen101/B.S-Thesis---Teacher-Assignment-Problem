@@ -1,8 +1,8 @@
 require('dotenv').config()
-import express from 'express'
-import mongoose from 'mongoose'
-import courseRoutes from './routes/course.js'
-import adminRoutes from './routes/admin.js'
+
+const express = require('express')
+const mongoose = require('mongoose')
+const courseRoutes = require('./routes/course')
 
 // express app
 const app = express()
@@ -16,9 +16,10 @@ app.use((req, res, next) => {
 })
 
 // routes
-app.use('/api/routes', courseRoutes)
+app.use('/api/courses', courseRoutes)
 
 // connect to db
+mongoose.set('strictQuery', false);
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('connected to database')
