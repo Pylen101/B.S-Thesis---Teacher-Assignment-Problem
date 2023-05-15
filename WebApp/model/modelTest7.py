@@ -1,4 +1,3 @@
-# """Nurse scheduling problem with shift requests."""
 from ortools.sat.python import cp_model
 # IN THIS MODEL WE ACCOMPLISH THE FOLLOWING:
 # TAS CAN TEACH A CERTAIN NUMBER OF SESSIONS FOR EACH COURSE
@@ -27,10 +26,10 @@ def main():
 
     taCourseAssignment = [
         [9, 6, 0],
-        [3, 6, 0],
-        [3, 0, 0],
-        [9, 0, 0],
-        [6, 0, 12]
+        [9, 6, 0],
+        [6, 0, 6],
+        [9, 0, 3],
+        [6, 0, 12],
     ]
     # Shows Number of Tutorial Groups for each course
 
@@ -52,7 +51,32 @@ def main():
          [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
          [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
          ],
+        [2, 2, 2, 2, 2, 2],
+        [2, 2, 2, 2, 2, 2],
+        [2, 2, 2, 2, 2, 2],
+        [0, 2, 2, 2, 2, 2],
+        [2, 2, 2, 2, 2, 2]
+
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0]
     ]"""
+
+    # TA number of sessions in each day preference matrix (max: 4, min: 2)
+    # row : TA, col : Day
+    sessionNumberPreference = [
+        [2, 2, 2, 2, 2, 2],
+        [2, 2, 2, 2, 2, 2],
+        [0, 2, 2, 2, 2, 2],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+    ]
+    sumPref = 0
+    for i in range(len(sessionNumberPreference)):
+        for j in range(len(sessionNumberPreference[i])):
+            sumPref = sumPref + 4
 
     # TA day off pereferance matrix (top 2 scores are chosen as day off)
     # row : TA, col : Day
@@ -62,8 +86,8 @@ def main():
         [6, 5, 3, 4, 2, 1],
         [1, 2, 6, 5, 4, 3],
         [1, 2, 3, 4, 5, 6],
-        [1, 2, 3, 4, 6, 5],
-        [1, 6, 5, 4, 3, 2],
+        [1, 2, 3, 6, 4, 5],
+        [6, 1, 5, 4, 3, 2],
     ]
 
     # Courses are either available in a slot or not based on the schedule
@@ -75,10 +99,10 @@ def main():
     # Assume we have 4 tutorial groups
     schedule = [
         # sat
-        [[[0, 0, 0, 0, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1]],
-         [[0, 0, 0, 1, 1], [0, 0, 1, 0, 0], [0, 1, 0, 0, 0]],
+        [[[1, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
+         [[1, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
          [[0, 1, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-         [[0, 0, 1, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 1]],
+         [[1, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
          [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
          ],
         # sun
@@ -89,17 +113,17 @@ def main():
          [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
          ],
         # mon
-        [[[0, 0, 0, 0, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1]],
-         [[0, 0, 0, 1, 1], [0, 0, 1, 0, 0], [0, 1, 0, 0, 0]],
-         [[0, 1, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-         [[0, 0, 1, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 1]],
+        [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
+         [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
+         [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
+         [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
          [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
          ],
         # tue
-        [[[0, 0, 0, 0, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1]],
-         [[0, 0, 0, 1, 1], [0, 0, 1, 0, 0], [0, 1, 0, 0, 0]],
-         [[0, 1, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-         [[0, 0, 1, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 1]],
+        [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
+         [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
+         [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
+         [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
          [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
          ],
         # wed
@@ -117,45 +141,6 @@ def main():
          [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
          ],
     ]
-
-    # For visualisation purposes, we will print the schedule matrix in a more readable format
-    # Assume the 5 courses are: 0, 1, 2, 3, 4 which correspond to MATH101, PHYS101, CSEN101, CHEM101, GERM101
-    for i in range(len(schedule)):
-        if (i == 0):
-            print('|     Sat      |')
-        elif (i == 1):
-            print('|      Sun      |')
-        elif (i == 2):
-            print('|      Mon      |')
-        elif (i == 3):
-            print('|      Tue      |')
-        elif (i == 4):
-            print('|      Wed      |')
-        else:
-            print('|      Thu      |')
-        for j in range(len(schedule[i])):
-            print("Slot", j)
-            print("________________________________________")
-            for k in range(len(schedule[i][j])):
-                for z in range(len(schedule[i][j][k])):
-                    if (schedule[i][j][k][z] == 1):
-                        if (k == 0):
-                            print("|", "Tutorial Group", z,
-                                  "is Taking:", "MATH101", "|")
-                        elif (k == 1):
-                            print("|", "Tutorial Group", z,
-                                  "is Taking:", "PHYS101", "|")
-                        elif (k == 2):
-                            print("|", "Tutorial Group", z,
-                                  "is Taking:", "CSEN101", "|")
-                        elif (k == 3):
-                            print("|", "Tutorial Group", z,
-                                  "is Taking:", "CHEM101", "|")
-                        else:
-                            print("|", "Tutorial Group", z,
-                                  "is Taking:", "GERM101", "|")
-            print("________________________________________")
-        print('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
 
     firstDayForCourseTutorialFlag = [
         [True]*num_tutorialGroups for i in range(num_courses)]
@@ -192,17 +177,44 @@ def main():
                     for tutorialGroup in all_tutorialGroups:
                         tutorials[(ta, day, slot, course, tutorialGroup)] = model.NewBoolVar(
                             'ta%id%is%ic%itg%i' % (ta, day, slot, course, tutorialGroup))
+    dayOff = {}
+    for ta in all_tas:
+        for day in all_days:
+            dayOff[(ta, day)] = model.NewBoolVar(
+                'ta%id%ioff' % (ta, day))
+    maxTut = {}
+    for ta in all_tas:
+        for i in range(len(sessionNumberPreference[ta])):
+            maxTut[(ta, i)] = model.NewIntVar(sessionNumberPreference[ta][i], 4, 'day%iMaxTut' %
+                                              (i))
 
-    # Each tutorialGroup is assigned to exactly one TA in .
+    for ta in all_tas:
+        for day in all_days:
+            allTut = []
+            for slot in all_slots:
+                for course in all_courses:
+                    for tutorialGroup in all_tutorialGroups:
+                        allTut.append(
+                            tutorials[(ta, day, slot, course, tutorialGroup)])
+            model.Add(sum(allTut) <= maxTut[(ta, day)])
+
+    sumMaxTut = []
+    for ta in all_tas:
+        for i in range(len(sessionNumberPreference[ta])):
+            sumMaxTut.append(maxTut[(ta, i)])
+
+    # Each tutorialGroup has to be assigned to exactly one TA in .
     for day in all_days:
         for slot in all_slots:
             for course in all_courses:
                 for tutorialGroup in all_tutorialGroups:
+                    if (schedule[day][slot][course][tutorialGroup] == 0):
+                        continue
                     constraints = []
                     for ta in all_tas:
                         constraints.append(
                             tutorials[(ta, day, slot, course, tutorialGroup)])
-                    model.Add(sum(constraints) <= 1)
+                    model.Add(sum(constraints) == 1)
 
     # Each TA is assigned at most one tutorialGroup in one slot.
     for day in all_days:
@@ -236,14 +248,19 @@ def main():
                 model.Add(sum([tutorials[(ta, day, slot, course, tutorialGroup)]
                                for day in all_days for slot in all_slots])
                           == 0).OnlyEnforceIf(tutorials[(ta, firstDayForCourseTutorial[course][tutorialGroup][0], firstDayForCourseTutorial[course][tutorialGroup][1], course, tutorialGroup)].Not())
-    # TA should have 2 days off in a week depending on highest applicable pereferance
+
+    # Each TA may indicate a certain number of sessions in each day as indicated by the sessionNumberPreference matrix
     for ta in all_tas:
         for day in all_days:
+            sessionConstraints = []
             for slot in all_slots:
                 for course in all_courses:
                     for tutorialGroup in all_tutorialGroups:
-                        model.Add(tutorials[(ta, day, slot, course, tutorialGroup)] <=
-                                  taOffPreference[ta][day][slot]).OnlyEnforceIf(tutorials[(ta, day, slot, course, tutorialGroup)])
+                        sessionConstraints.append(
+                            tutorials[(ta, day, slot, course, tutorialGroup)])
+            model.Add(sum(sessionConstraints) <=
+                      4)
+
     # TA cannot be assigned to a course if they are not teaching that course
     TACourseMisMatch = []
     for day in all_days:
@@ -270,15 +287,44 @@ def main():
                             tutorials[(ta, day, slot, course, tutorialGroup)])
     model.Add(sum(SlotCourseMisMatch) == 0)
 
+    # TA should have 2 days off in a week depending on highest applicable pereferance
+    # First we must set day off limit to 2
+
+    for ta in all_tas:
+        dayOffLimit = []
+        for day in all_days:
+            dayOffLimit.append(dayOff[(ta, day)])
+        model.Add(sum(dayOffLimit) == 2)
+
+    # ------------------------------ OBJECTIVE FUNCTION ------------------------------------
+    # We must calculate all scores of all days off from the taDayOffPreference matrix
+
+    dayOffScore = []
+    for ta in all_tas:
+        for day in all_days:
+            dayOffScore.append(
+                taDayOffPreference[ta][day]*dayOff[(ta, day)])
+    model.Maximize(sum(dayOffScore) - (1/sumPref)*sum(sumMaxTut))
+    # ------------------------------ OBJECTIVE FUNCTION ------------------------------------
+
+    # If the day is off for the TA, then he should not be assigned to any tutorialGroup in that day
+    for ta in all_tas:
+        for day in all_days:
+            for slot in all_slots:
+                for course in all_courses:
+                    for tutorialGroup in all_tutorialGroups:
+                        model.AddImplication(dayOff[(ta, day)],
+                                             tutorials[(ta, day, slot, course, tutorialGroup)].Not())
+
     # pylint: disable=g-complex-comprehension
-    model.Maximize(sum(tutorials[(ta, day, slot, course, tutorialGroup)]
-                   for day in all_days for ta in all_tas for slot in all_slots for course in all_courses for tutorialGroup in all_tutorialGroups))
 
     solver = cp_model.CpSolver()
     status = solver.Solve(model)
 
     counter = 0
-    if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
+    counterd = 0
+    numOfSessions = [[0]*num_days for i in range(num_tas)]
+    if status == cp_model.OPTIMAL:
         print('Solution:')
         print("-------------------------------------------start--------------------------------------------")
 
@@ -294,6 +340,7 @@ def main():
                             if solver.Value(tutorials[(ta, day, slot, course, tutorialGroup)]) == 1:
                                 print('     TA:', ta, 'Assigned-to Slot:',
                                       slot, 'Course:', course, 'tutorialGroup:', tutorialGroup)
+                                numOfSessions[ta][day] += 1
                                 counter += 1
                                 tutorialNotAssigned = False
 
@@ -301,10 +348,21 @@ def main():
                             print('     No TA could be assigned to this tutorial')
 
                 print()
+        print("-----------------Day off for each TA:--------------------")
+        for day in all_days:
+            print('Day', day, '________________________________')
+            for ta in all_tas:
+                if solver.Value(dayOff[(ta, day)]) == 1:
+                    counterd += 1
+                    print('     TA:', ta, 'is off on day:', day)
+
     else:
         print('No solution found !')
     if counter == 0:
         print('No TA assigned to any course')
+
+    print("actual sessions assigned to each TA:", numOfSessions)
+    print("sessionsPreference:", sessionNumberPreference)
 
     counter2 = 0
     scheduleCopy = schedule.copy()
@@ -315,8 +373,12 @@ def main():
                     if scheduleCopy[i][j][k][x] == 1:
                         counter2 += 1
     print('-------------------------------------------')
-    print("courses that should be assigned:", counter2)
-    print("Courses actully assigned:", counter)
+    print("Tutorials that should be assigned:", counter2)
+    print("Tutorials actully assigned:", counter)
+    print('-------------------------------------------')
+    print(f'Total cost = {solver.ObjectiveValue()}')
+    print("Days that should be taken off:", 2*num_tas)
+    print("Days that are actually taken off:", counterd)
     print('-------------------------------------------')
 
     # Statistics.

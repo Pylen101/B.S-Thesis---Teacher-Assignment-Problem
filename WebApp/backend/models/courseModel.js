@@ -11,9 +11,10 @@ const courseSchema = new Schema({
         type: String,
         required: true
     },
-    assignedTeacher: {
-        type: String
+    courseDescription: {
+        type: String,
+        required: true
     }
 }, { timestamps: true })
 
-module.exports = mongoose.model('course', courseSchema)
+module.exports = mongoose.model('courseModel', courseSchema, 'courses')

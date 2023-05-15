@@ -1,0 +1,223 @@
+/* google font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap');
+
+/* layout */
+:root {
+  --primary: #1aac83;
+  --primary-hover: #0d8a63;
+  --secondary: #f1f1f1;
+  --error: #e7195a;
+  --delete: #e31657;
+  --delete-hover: #9a0937;
+}
+
+body {
+  background: #f1f1f1;
+  margin: 0;
+  font-family: "Poppins";
+}
+
+header {
+  background: #fff;
+}
+
+
+header .container {
+  position: fixed;
+  grid-area: header;
+  top: 0;
+  left: 0;
+  width: 150%;
+  z-index: 100;
+  background: white;
+  text-align: center;
+  max-width: auto;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header a {
+  color: #333;
+  text-decoration: none;
+}
+
+.pages {
+  max-width: 80%;
+  padding: 20px;
+  margin: 6% auto;
+}
+
+/* homepage */
+.manageTeacherAssistants {
+  display: grid;
+  grid-template-areas:
+    'header header header header header header'
+    'menu main main main right right'
+    'menu footer footer footer footer footer';
+  gap: 10px;
+}
+
+.teacherAssistants {
+  grid-area: main;
+  margin: 10%;
+
+}
+
+.TAform {
+  grid-area: right;
+  background: #fff;
+  border-radius: 4px;
+  margin: 20%;
+  padding: 20px;
+  position: relative;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+  vertical-align: top;
+  height: 100vh auto;
+
+}
+
+.teacherassistant-details {
+  width: 100%;
+  background: #fff;
+  border-radius: 4px;
+  margin: 2% auto;
+  padding: 20px;
+  position: relative;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.teacherassistant-details h2 {
+  margin: 0 0 10px 0;
+  font-size: 1.2em;
+  color: var(--primary);
+}
+
+.teacherassistant-details p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #555;
+  padding: 5px 0;
+}
+
+.teacherassistant-details span {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  background: #f1f1f1;
+  padding: 6px;
+  border-radius: 50%;
+  color: #333;
+}
+
+.teacherassistant-details tr,
+th,
+td {
+  border: 1px solid black;
+  padding: 1px;
+  text-align: center;
+}
+
+.teacherassistant-details table {
+
+  background: #f2f2f2;
+  border: 1px solid black;
+  text-align: center;
+  width: 100%;
+  border-collapse: collapse;
+  padding: 5px 0;
+}
+
+/* new workout form */
+label,
+input {
+  display: block;
+}
+
+input {
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+form button {
+  background: var(--primary);
+  border: 0;
+  color: #fff;
+  padding: 10px;
+  font-family: "Poppins";
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.coursesTeachingButton {
+  background: var(--primary);
+  border: 0;
+  color: #fff;
+  padding: 5px;
+  font-family: "Poppins";
+  border-radius: 2px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  width: 50%;
+}
+
+.coursesTeachingButton:hover {
+  background-color: var(--primary-hover)
+}
+
+.deleteButton {
+  background: var(--delete);
+  border: 0;
+  color: #fff;
+  padding: 5px;
+  font-family: "Poppins";
+  border-radius: 2px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  width: 50%;
+}
+
+.deleteButton:hover {
+  background-color: var(--delete-hover)
+}
+
+.submitButton {
+  background: var(--primary);
+  border: 0;
+  color: #fff;
+  padding: 10px;
+  font-family: "Poppins";
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+
+}
+
+.submitButton:hover {
+  background-color: var(--primary-hover)
+}
+
+div.error {
+  padding: 10px;
+  background: #ffefef;
+  border: 1px solid var(--error);
+  color: var(--error);
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+input.error {
+  border: 1px solid var(--error);
+}
