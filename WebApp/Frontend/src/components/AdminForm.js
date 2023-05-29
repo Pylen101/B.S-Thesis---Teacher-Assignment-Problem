@@ -2,22 +2,21 @@ import { useState } from 'react';
 import { useTeacherAssistantsContext } from '../hooks/useTeacherAssistantsContext';
 import { useAuthContext } from '../hooks/hook';
 
-const TAForm = () => {
+const AdminForm = () => {
     const { dispatch } = useTeacherAssistantsContext();
     const { userIn } = useAuthContext();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [coursesTeaching, setCoursesTeaching] = useState([{ courseCode: "", sessionNum: "" }]);
     const [error, setError] = useState(null);
     const [emptyFields, setEmptyFields] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const TA = { firstName, lastName, email, password, coursesTeaching }
+        const TA = { firstName, lastName, email, password }
 
-        const response = await fetch('/users/addNewUser?id=' + userIn, {
+        const response = await fetch('/users/addNewAdmin?id=' + userIn, {
             method: 'POST',
             body: JSON.stringify(TA),
             headers: {
@@ -37,43 +36,16 @@ const TAForm = () => {
             setLastName('');
             setEmail('');
             setPassword('');
-            setCoursesTeaching([{ courseCode: "", sessionNum: "" }]);
             setEmptyFields([]);
             dispatch({ type: 'ADD_TEACHER_ASSISTANT', payload: json })
             console.log(json);
         }
     }
 
-    const handleClick = () => {
-        setCoursesTeaching([...coursesTeaching, { courseCode: "", sessionNum: "" }]);
-    }
-
-    const handleChange = (e, i) => {
-        e.preventDefault()
-        const { name, value } = e.target
-        const onChangeVal = [...coursesTeaching]
-        onChangeVal[i][name] = value
-        setCoursesTeaching(onChangeVal)
-
-    }
-    const handleDelete = (i) => {
-        const deleteVal = [...coursesTeaching]
-        deleteVal.splice(i, 1)
-        setCoursesTeaching(deleteVal)
-    }
-
-    function deleteButton(i) {
-        if (i != 0) {
-            return <button type='button' className='deleteButton' onClick={() => handleDelete(i)}>Delete Courses Fields</button>
-        }
-
-    }
-
-
     return (
         <div className='TAform'>
             <form className='create' onSubmit={handleSubmit}>
-                <h3>Add a new Teacher Assistant</h3>
+                <h3>Add a new Admin</h3>
                 <label>First Name:</label>
                 <input
                     type='text'
@@ -102,19 +74,7 @@ const TAForm = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     className={emptyFields.includes("password") ? "error" : ""}
                 />
-                <button className='coursesTeachingButton' onClick={handleClick} type='button'>Add More Fields for Courses</button>{
-                    coursesTeaching.map((item, i) =>
-                        <div>
-                            <label>Course {"  " + (i + 1)}</label>
-                            <input className={emptyFields.includes("courseCode") ? "error" : ""}
-                                name="courseCode" type="text" value={item.courseCode} placeholder="Course Code" onChange={(e) => handleChange(e, i)} />
-                            <input className={emptyFields.includes("sessionNum") ? "error" : ""}
-                                name="sessionNum" type="number" value={item.sessionNum} placeholder="Session Number" onChange={(e) => handleChange(e, i)} />
-                            {deleteButton(i)}
-                        </div>
-                    )
-                }
-                <button onClick={handleSubmit} className='submitButton' type='submit'>Add Teacher Assistant</button>
+                <button onClick={handleSubmit} className='submitButton' type='submit'>Add Admin</button>
                 {
                     error && <div className="error">{error}</div>
                 }
@@ -126,4 +86,4 @@ const TAForm = () => {
     )
 }
 
-export default TAForm
+export default AdminForm

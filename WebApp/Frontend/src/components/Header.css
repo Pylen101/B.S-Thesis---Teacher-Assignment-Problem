@@ -20,6 +20,12 @@
     cursor: pointer;
 }
 
+
+
+.hyperlink {
+    color: #000;
+}
+
 .sub {
     margin-left: 1px;
     border: 1px solid white;

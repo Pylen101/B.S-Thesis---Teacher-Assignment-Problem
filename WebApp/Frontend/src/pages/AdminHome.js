@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react"
+import Navbar from "../components/Navbar"
+import Header from "../components/Header"
 const AdminHome = () => {
 
     useEffect(() => {
@@ -6,10 +8,17 @@ const AdminHome = () => {
 
     return (
         <div>
-            <h1>Welcome Admin!</h1>
-            <button>Manage Teacher Assistants</button>
-            <button>Manage Schedule</button>
-            <button>Manage Courses</button>
+            <Navbar />
+            <Header />
+            <div className='pages'>
+                <div className='teacherAssitantsProfile'>
+                    <div className="teacherAssistantsProfileBody">
+                        <h1>Welcome Admin!</h1>
+                        <h3>Please use the Menubar on the left to Navigate Through the Application</h3>
+                    </div>
+
+                </div>
+            </div>
         </div>
     );
 }

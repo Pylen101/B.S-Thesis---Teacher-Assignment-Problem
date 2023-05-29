@@ -1,4 +1,6 @@
 from ortools.sat.python import cp_model
+import sys
+import json
 # IN THIS MODEL WE ACCOMPLISH THE FOLLOWING:
 # TAS CAN TEACH A CERTAIN NUMBER OF SESSIONS FOR EACH COURSE
 
@@ -8,24 +10,16 @@ def main():
     # (3 shifts per day, for 7 days), subject to some constraints (see below).
     # Each nurse can request to be assigned to specific shifts.
     # The optimal taCourseAssignment maximizes the number of fulfilled shift requests.
-
-    # send msg
-    # print(sys.argv[1] + ' from python 1')
-    # print(sys.argv[2] + ' from python 2')
-    # print(sys.argv[3] + ' from python 3')
-    # print(sys.argv[4] + ' from python 4')
-    # print(sys.argv[5] + ' from python 5')
-    # print(sys.argv[6] + ' teacher course assignment')
-    # print(sys.argv[7] + ' day off pref')
-    # print(sys.argv[8] + ' session pref')
-    # print(sys.argv[9] + ' schedule')
+    parsed = json.loads(sys.argv[1])
+    arr = parsed[5]
+    successArray = []
 
     # (5 Slots per day, 3 courses and we have 5 TAs)
-    num_tas = 5
-    num_days = 6
-    num_slots = 5
-    num_courses = 3
-    num_tutorialGroups = 5
+    num_tas = parsed[0]
+    num_days = parsed[1]
+    num_slots = parsed[2]
+    num_courses = parsed[3]
+    num_tutorialGroups = parsed[4]
     all_tas = range(num_tas)
     all_days = range(num_days)
     all_slots = range(num_slots)
@@ -35,13 +29,8 @@ def main():
     # This is the taCourseAssignment matrix which tells us which TA is assigned to which course AND the number of sessions he should teach
     # row : TA, col : Course
 
-    taCourseAssignment = [
-        [9, 6, 0],
-        [6, 6, 0],
-        [3, 0, 12],
-        [9, 0, 0],
-        [6, 0, 6]
-    ]
+    taCourseAssignment = parsed[5]
+    # successArray.append(taCourseAssignment)
 
     # Shows Number of Tutorial Groups for each course
 
@@ -75,32 +64,20 @@ def main():
         [0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0]
     ]"""
+
     # TA day off pereferance matrix (top 2 scores are chosen as day off)
     # row : TA, col : Day
     # perefrence ranges from 1 to 6 (6 being the highest and 1 being the lowest)
     # Highest 2 applicable scores are chosen as day off
-    taDayOffPreference = [
-        [6, 5, 3, 4, 2, 1],
-        [1, 2, 6, 5, 4, 3],
-        [1, 2, 3, 4, 5, 6],
-        [1, 2, 3, 6, 4, 5],
-        [6, 1, 5, 4, 3, 2],
-    ]
+    taDayOffPreference = parsed[6]
 
     # TA number of sessions in each day preference matrix (max: 4, min: 2)
     # row : TA, col : Day
-    sessionNumberPreference = [
-        [2, 0, 2, 2, 2, 2],
-        [2, 2, 2, 2, 2, 2],
-        [2, 2, 2, 2, 2, 2],
-        [0, 2, 2, 2, 2, 2],
-        [2, 2, 2, 2, 2, 2]
-    ]
+    sessionNumberPreference = parsed[7]
     sumPref = 0
     for i in range(len(sessionNumberPreference)):
         for j in range(len(sessionNumberPreference[i])):
             sumPref = sumPref + 4
-    print(sessionNumberPreference[0][0] == 9)
 
     # Courses are either available in a slot or not based on the schedule
     # In this particular day, Course 1 is available in slot 2,3,4 but not in slots 1 and 5
@@ -109,50 +86,7 @@ def main():
     # The Tuples rows are tutorial groups and the columns are courses for which the tutorual groups are taking
     #
     # Assume we have 4 tutorial groups
-    schedule = [
-        # sat
-        [[[1, 0, 0, 0, 0], [1, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-         [[1, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-         [[0, 1, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-         [[1, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-         [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-         ],
-        # sun
-        [[[0, 0, 0, 0, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1]],
-         [[0, 0, 0, 1, 1], [0, 0, 1, 0, 0], [0, 1, 0, 0, 0]],
-            [[0, 1, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-            [[0, 0, 1, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 1]],
-            [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-         ],
-        # mon
-        [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-         [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-            [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-            [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-            [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-         ],
-        # tue
-        [[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-         [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-            [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-            [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-            [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-         ],
-        # wed
-        [[[0, 0, 0, 0, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1]],
-         [[0, 0, 0, 1, 1], [0, 0, 1, 0, 0], [0, 1, 0, 0, 0]],
-            [[0, 1, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-            [[0, 0, 1, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 1]],
-            [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-         ],
-        # thu
-        [[[0, 0, 0, 0, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1]],
-         [[0, 0, 0, 1, 1], [0, 0, 1, 0, 0], [0, 1, 0, 0, 0]],
-            [[0, 1, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
-            [[0, 0, 1, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 1]],
-            [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-         ],
-    ]
+    schedule = parsed[8]
 
     firstDayForCourseTutorialFlag = [
         [True]*num_tutorialGroups for i in range(num_courses)]
@@ -172,8 +106,6 @@ def main():
                             firstDayForCourseTutorialFlag[k][z] = False
                         tutNoForEachCourseGroup[k][z] = tutNoForEachCourseGroup[k][z] + 1
 
-    print("Number of Tutorials for each course and Group:", tutNoForEachCourseGroup)
-    print("First day and slot for each course:", firstDayForCourseTutorial)
     # Creates the model.
 
     model = cp_model.CpModel()
@@ -197,8 +129,7 @@ def main():
     maxTut = {}
     for ta in all_tas:
         for i in range(len(sessionNumberPreference[ta])):
-            maxTut[(ta, i)] = model.NewIntVar(0, 4, 'day%iMaxTut' %
-                                              (i))
+            maxTut[(ta, i)] = model.NewIntVar(0, 4, 'day%iMaxTut' % (i))
 
     for ta in all_tas:
         for day in all_days:
@@ -215,7 +146,7 @@ def main():
         for i in range(len(sessionNumberPreference[ta])):
             sumMaxTut.append(maxTut[(ta, i)] - sessionNumberPreference[ta][i])
 
-    # Each tutorialGroup has to be assigned to exactly one TA for a particular course.
+    # Each tutorialGroup has to be assigned to exactly one TA in .
     for day in all_days:
         for slot in all_slots:
             for course in all_courses:
@@ -336,9 +267,9 @@ def main():
     counter = 0
     counterd = 0
     numOfSessions = [[0]*num_days for i in range(num_tas)]
+
     if status == cp_model.OPTIMAL:
-        print('Solution:')
-        print("-------------------------------------------start--------------------------------------------")
+        # create output shecdule
         outputSchedule = []
         for day in all_days:
             outputSchedule.append([])
@@ -350,74 +281,46 @@ def main():
                             if solver.Value(tutorials[(ta, day, slot, course, tutorialGroup)]) == 1:
                                 outputSchedule[day][slot].append(
                                     [course, tutorialGroup, ta])
-        outPutDayOff = []
-        for day in all_days:
-            outPutDayOff.append([])
-            for ta in all_tas:
-                if solver.Value(dayOff[(ta, day)]) == 1:
-                    outPutDayOff[day].append(ta)
-
-        print(outputSchedule)
-        print(outPutDayOff)
-        for day in all_days:
-            print('Day', day, '________________________________')
-            for slot in all_slots:
-                print(' Slot', slot)
-                print()
-                for course in all_courses:
-                    for tutorialGroup in all_tutorialGroups:
-                        tutorialNotAssigned = True
-                        for ta in all_tas:
+        successArray.append(outputSchedule)
+        # create list of tutorials for each TA
+        outputTutorials = []
+        for ta in all_tas:
+            outputTutorials.append([])
+            for day in all_days:
+                for slot in all_slots:
+                    for course in all_courses:
+                        for tutorialGroup in all_tutorialGroups:
                             if solver.Value(tutorials[(ta, day, slot, course, tutorialGroup)]) == 1:
-                                print('     TA:', ta, 'Assigned-to Slot:',
-                                      slot, 'Course:', course, 'tutorialGroup:', tutorialGroup)
-                                numOfSessions[ta][day] += 1
-                                counter += 1
-                                tutorialNotAssigned = False
+                                outputTutorials[ta].append(
+                                    [day, slot, course, tutorialGroup, ta])
+        successArray.append(outputTutorials)
 
-                        if tutorialNotAssigned and schedule[day][slot][course][tutorialGroup] == 1:
-                            print('     No TA could be assigned to this tutorial')
+        outputDayOffTA = []
+        for ta in all_tas:
+            outputDayOffTA.append([])
+            for day in all_days:
+                if solver.Value(dayOff[(ta, day)]) == 1:
+                    outputDayOffTA[ta].append(day)
+        successArray.append(outputDayOffTA)
 
-                print()
-        print("-----------------Day off for each TA:--------------------")
+        outputDayOffDay = []
         for day in all_days:
-            print('Day', day, '________________________________')
+            outputDayOffDay.append([])
             for ta in all_tas:
                 if solver.Value(dayOff[(ta, day)]) == 1:
-                    counterd += 1
-                    print('     TA:', ta, 'is off on day:', day)
+                    outputDayOffDay[day].append(ta)
+        successArray.append(outputDayOffDay)
+        # print(outputSchedule)
+        # print(outPutDayOff)
 
     else:
-        print('No solution found !')
-    if counter == 0:
-        print('No TA assigned to any course')
+        successArray.append("FAILURE")
 
-    print("actual sessions assigned to each TA:", numOfSessions)
-    print("sessionsPreference:", sessionNumberPreference)
+    # print("actual sessions assigned to each TA:", numOfSessions)
+    # print("sessionsPreference:", sessionNumberPreference)
 
-    counter2 = 0
-    scheduleCopy = schedule.copy()
-    for i in range(len(scheduleCopy)):
-        for j in range(len(scheduleCopy[i])):
-            for k in range(len(scheduleCopy[i][j])):
-                for x in range(len(scheduleCopy[i][j][k])):
-                    if scheduleCopy[i][j][k][x] == 1:
-                        counter2 += 1
-    print('-------------------------------------------')
-    print("Tutorials that should be assigned:", counter2)
-    print("Tutorials actully assigned:", counter)
-    print('-------------------------------------------')
-    print(f'Total cost = {solver.ObjectiveValue()}')
-    print("Days that should be taken off:", 2*num_tas)
-    print("Days that are actually taken off:", counterd)
-    print('-------------------------------------------')
-
-    # Statistics.
-    print('\nStatistics')
-    print('  - conflicts: %i' % solver.NumConflicts())
-    print('  - branches : %i' % solver.NumBranches())
-    print('  - wall time: %f slot' % solver.WallTime())
-    print("-------------------------------------------end-----------------------------------------")
+    sys.stdout.write(json.dumps(successArray))
+    # parsed = json.load(sys.stdin)
 
 
 if __name__ == '__main__':

@@ -52,8 +52,11 @@ const userSchema = new Schema({
     // tutorials array
     assignedTutorials: [
         {
-            type: Schema.Types.ObjectId,
-            ref: 'tutorial'
+            day: Number,
+            slot: Number,
+            courseCode: String,
+            tutorialGroup: Number,
+            assignedTA: String
         }
     ],
     // schedule
@@ -61,7 +64,11 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'schedule',
         default: null
+    },
+    assignedDaysOff: {
+        type: [Number]
     }
+
 
 }, { timestamps: true })
 

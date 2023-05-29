@@ -2,8 +2,7 @@
 import React, { useState } from "react";
 import logo from '../images/gucLogo.png';
 import { Link, useNavigate } from 'react-router-dom';
-import Resizer from "react-image-file-resizer";
-
+import UseLogout from '../hooks/LogoutHook'
 
 //import react pro sidebar components
 import {
@@ -26,7 +25,6 @@ import { GiTeacher } from "react-icons/gi";
 import { MdEditCalendar } from "react-icons/md";
 import { AiOutlineSchedule } from "react-icons/ai";
 import { ImNewspaper } from "react-icons/im";
-import UseLogout from '../hooks/LogoutHook'
 
 
 //import sidebar css from react-pro-sidebar module and our custom css 
@@ -34,7 +32,7 @@ import "react-pro-sidebar/dist/css/styles.css";
 import "./Header.css";
 
 
-const Header = () => {
+const HeaderTA = () => {
     const navigate = useNavigate()
     const { logout, isLoading } = UseLogout()
     const Logout = () => {
@@ -63,7 +61,7 @@ const Header = () => {
                     <SidebarHeader >
                         <div className="logotext">
                             {/* small and big change using menucollapse state */}
-                            <p style={{ textAlign: "Left" }}>{menuCollapse ? "List" : "List"} </p>
+                            <p>{menuCollapse ? "List" : "List"} </p>
 
 
                         </div>
@@ -80,39 +78,27 @@ const Header = () => {
                         <Menu iconShape="square" >
 
                             <MenuItem active={true} icon={<FiHome />}>
-                                <Link className="link" to="/admin">
+                                <Link className="link" to="/teacherAssistant">
                                     <div className="hyperlink">Home</div>
                                 </Link>
                             </MenuItem>
 
-                            <SubMenu title="Manage Schedules" icon={<FaList />}>
-                                <MenuItem icon={<MdEditCalendar />} className="sub">
-                                    <Link className="link" to="/admin/assignTeacherAssistants">
-                                        <div className="hyperlink">Assign TAs</div>
+                            <SubMenu title="Instructor Options" icon={<GiTeacher />}>
+
+                                <MenuItem icon={<FaUser />} className="sub">
+                                    <Link className="hyperlink" to="/teacherAssistant/teacherAssistantProfile">
+                                        <div className="hyperlink">My Profile</div>
                                     </Link>
                                 </MenuItem>
+
                                 <MenuItem icon={<AiOutlineSchedule />} className="sub">
-                                    <Link className="link" to="/admin/viewAllSchedulesAdmin">
+                                    <Link className="link" to="/teacherAssistant/viewAllSchedulesTA">
                                         <div className="hyperlink">View Schedules</div>
                                     </Link>
                                 </MenuItem>
-                            </SubMenu>
-                            <SubMenu title="Manage Users" icon={<FaUser />}>
 
-                                <MenuItem icon={<GrUserAdmin />} className="sub">
-                                    {/*LINK HERE*/}
-                                    <Link className="link" to='/admin/manageAdmins'>
-                                        <div className="hyperlink">
-                                            Admins
-                                        </div>
-                                    </Link>
-                                </MenuItem>
-                                <MenuItem icon={<GiTeacher />} className="sub">
-                                    <Link className="link" to="/admin/manageTeacherAssistants">
-                                        <div className="hyperlink">TAs</div>
-                                    </Link>
-                                </MenuItem>
                             </SubMenu>
+
                         </Menu>
                     </SidebarContent>
                     <SidebarFooter>
@@ -126,4 +112,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default HeaderTA;
